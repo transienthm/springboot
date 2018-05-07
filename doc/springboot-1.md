@@ -350,3 +350,271 @@ pets:
 	- pig
 ```
 
+## 3、配置文件值注入
+
+yaml配置文件
+
+```yaml
+person:
+        lastName: zhangsan
+        age: 18
+        boss: false
+        birth: 2017/12/12
+        maps: {k1: v1, k2: v2}
+        lists:
+            - lisi
+            - wangwu
+            - zhaoliu
+        dog:
+            name: giggle
+            age: 2
+```
+
+java bean
+
+```java
+/**
+ * 将配置文件中配置的每一个属性的值，映射到这个组件中
+ * @ConfigurationProperties :告诉Spring Boot将本类中的所有属性和配置文件中相关的配置进行绑定
+ * 	perfix = "person" : 配置文件中哪个下面的所有属性进行一一映射
+ * 	 只要该组件是容器中的组件，才能使用容器中的功能
+ */
+@Component
+@ConfigurationProperties(prefix = "person")
+public class Person {
+	private String lastName;
+	private Integer age;
+	private Boolean boss;
+	private Date birth;
+
+	private Map<String, Object> maps;
+	private List<Object> lists;
+	private Dog dog;
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Boolean getBoss() {
+		return boss;
+	}
+
+	public void setBoss(Boolean boss) {
+		this.boss = boss;
+	}
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	public Map<String, Object> getMaps() {
+		return maps;
+	}
+
+	public void setMaps(Map<String, Object> maps) {
+		this.maps = maps;
+	}
+
+	public List<Object> getLists() {
+		return lists;
+	}
+
+	public void setLists(List<Object> lists) {
+		this.lists = lists;
+	}
+
+	public Dog getDog() {
+		return dog;
+	}
+
+	public void setDog(Dog dog) {
+		this.dog = dog;
+	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"lastName='" + lastName + '\'' +
+				", age=" + age +
+				", boss=" + boss +
+				", birth=" + birth +
+				", maps=" + maps +
+				", lists=" + lists +
+				", dog=" + dog +
+				'}';
+	}
+}
+```
+
+单元测试
+
+```java
+/**
+ * Spring Boot 单元测试
+ *
+ * 可以在测试期间很文件的类似编码一样进行自动注入到容器当中
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class HelloWorldMainApplicationTest {
+
+    @Autowired
+    Person person;
+
+    @Test
+    public void contextLoads() {
+        System.out.println(person);
+    }
+
+}
+```
+
+可以导入配置文件处理器，以后编写配置文件就有提示了
+
+```xml
+        <!-- 导入配置文件处理器，配置文件进行绑定就会有提示-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+```
+
+### 1、@Value获取值和@ConfigurationProperties获取值比较 
+
+|                       | @ConfigurationProperties | @Value   |
+| --------------------- | ------------------------ | -------- |
+| 功能                  | 批量注入配置文件中的属性 | 逐个指定 |
+| 松散绑定（松散语法）  | 支持                     | 不支持   |
+| SpEL                  | 不支持                   | 支持     |
+| JSR303数据校验        | 支持                     | 不支持   |
+| 复杂类型封闭（如map） | 支持                     | 不支持   |
+
+配置文件不管是yml还是properties，两种方式都能获取到值；
+
+**如果只是在某个业务逻辑中需要获取一下配置文件中的某项值，就使用@Value；如果专门编写了一个JavaBean来和配置文件进行映射，则使用@ConfigurationProperties**
+
+### 2、配置文件注入值数据校验
+
+```java
+@Component
+@ConfigurationProperties(prefix = "person")
+@Validated
+public class Person {
+	/**
+	 * <bean class="Person">
+	 * <property name="lastName" value="字面量/${key}/#{SpEL}从环境变量、配置文件中取值" />
+	 * </bean>
+	 */
+	//lastName必须是email
+	@Email
+	private String lastName;
+	private Integer age;
+	private Boolean boss;
+	private Date birth;
+
+	private Map<String, Object> maps;
+	private List<Object> lists;
+	private Dog dog;
+}
+```
+
+### @PropertiesSource & @ImportResource
+
+@PropertiesSource加载指定的配置文件
+
+```java
+/**
+ * 	 @ConfigurationProperties(prefix="person)  默认从全局配置文件中获取值
+ */
+@Component
+@ConfigurationProperties(prefix = "person")
+@PropertySource(value = {"classpath:person.properties"})
+public class Person {
+	/**
+	 * <bean class="Person">
+	 * <property name="lastName" value="字面量/${key}/#{SpEL}从环境变量、配置文件中取值" />
+	 * </bean>
+	 */
+	private String lastName;
+	private Integer age;
+	private Boolean boss;
+	private Date birth;
+
+	private Map<String, Object> maps;
+	private List<Object> lists;
+	private Dog dog;
+}
+```
+
+@ImportResource：导入Spring的配置文件，让配置文件里面的内容生效
+
+Spring Boot里面没有Spring的配置文件，我们自己编写的配置文件，也不能自动识别；
+
+如果需要让Spring的配置文件生效，加载进来，需要将@ImportResource加到配置类上
+
+```java
+@ImportResource(locations = {"classpath:beans.xml"})
+导入spring配置文件使其生效，需要加在Spring配置类上
+```
+
+
+
+不来Spring配置文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+   
+    <bean id="helloService" class="com.meituan.service.HelloService"></bean>
+
+</beans>
+```
+
+
+
+Spring Boot推荐给容器中添加组件的方式：推荐使用全注解的方式
+
+1. 配置类=========Spring配置文件
+
+   
+
+2. 使用@Bean来给容器添加组件
+
+   ```
+   /**
+    * 指明当前类是一个配置类，用来替代之前的Spring配置文件
+    *  在配置文件中用<bean></bean>标签添加组件
+    * \
+    */
+   @Configuration
+   public class MyAppConfig {
+   
+       //将方法的返回值添加到容器中，容器中这个组件默认的id就是方法名
+       @Bean
+       public HelloService helloService() {
+           return new HelloService();
+       }
+   }
+   ```
+
+   
+

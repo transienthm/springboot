@@ -1,0 +1,13 @@
+#person:
+#        age: 18
+#        boss: false
+#        birth: 2017/12/12
+#        maps: {k1: v1, k2: v2}
+#        lists:
+#            - lisi
+#            - wangwu
+#            - zhaoliu
+#        dog:
+#            name: giggle
+#            age: 2
+#        last-name: zhangsan

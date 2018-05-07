@@ -1,0 +1,46 @@
+{
+  "hints": [],
+  "groups": [{
+    "sourceType": "com.meituan.bean.Person",
+    "name": "person",
+    "type": "com.meituan.bean.Person"
+  }],
+  "properties": [
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.age",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.birth",
+      "type": "java.util.Date"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.boss",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.dog",
+      "type": "com.meituan.bean.Dog"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.last-name",
+      "description": "<bean class=\"Person\">\n <property name=\"lastName\" value=\"字面量/${key}/#{SpEL}从环境变量、配置文件中取值\" />\n <\/bean>",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.lists",
+      "type": "java.util.List<java.lang.Object>"
+    },
+    {
+      "sourceType": "com.meituan.bean.Person",
+      "name": "person.maps",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>"
+    }
+  ]
+}
