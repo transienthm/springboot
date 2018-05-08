@@ -180,30 +180,12 @@
 	"buffers":
 	[
 		{
-			"file": "springboot01helloworld/pom.xml",
+			"file": "doc/springboot-1.md",
 			"settings":
 			{
-				"buffer_size": 1860,
+				"buffer_size": 25519,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "springboot01helloworld/src/main/java/com/meituan/bean/Person.java",
-			"settings":
-			{
-				"buffer_size": 1563,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "springboot01helloworld/src/main/java/com/meituan/bean/Dog.java",
-			"settings":
-			{
-				"buffer_size": 397,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
 			}
 		}
 	],
@@ -274,10 +256,13 @@
 	],
 	"file_history":
 	[
+		"/C/Users/cab/AppData/Roaming/Sublime Text 3/Packages/GoSublime/USAGE.md",
+		"/F/workspace/springboot/springboot01helloworld/pom.xml",
+		"/F/workspace/springboot/springboot01helloworld/src/main/java/com/meituan/bean/Dog.java",
+		"/F/workspace/springboot/springboot01helloworld/src/main/java/com/meituan/bean/Person.java",
 		"/F/word1 - 副本.txt",
 		"/F/workspace/Demo.java",
 		"/C/Users/cab/Desktop/word.txt",
-		"/C/Users/cab/AppData/Roaming/Sublime Text 3/Packages/GoSublime/USAGE.md",
 		"/F/workspace/springboot01helloworld/src/main/java/com/meituan/controller/HelloController.java",
 		"/F/workspace/springboot01helloworld/src/main/java/com/meituan/HelloWorldMainApplication.java",
 		"/F/workspace/springboot01helloworld/pom.xml",
@@ -364,7 +349,7 @@
 	],
 	"find":
 	{
-		"height": 43.0
+		"height": 30.0
 	},
 	"find_in_files":
 	{
@@ -403,95 +388,37 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "springboot01helloworld/pom.xml",
+					"file": "doc/springboot-1.md",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1860,
+						"buffer_size": 25519,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								301,
-								301
+								24392,
+								24392
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/XML/XML.sublime-syntax",
-							"tab_size": 4,
+							"syntax": "Packages/MarkdownHighlighting/Markdown.sublime-syntax",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "springboot01helloworld/src/main/java/com/meituan/bean/Person.java",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1563,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								249,
-								249
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/Java/Java.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 22309.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "springboot01helloworld/src/main/java/com/meituan/bean/Dog.java",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 397,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								395,
-								395
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -548,7 +475,7 @@
 	"project": "springboot.sublime-project",
 	"replace":
 	{
-		"height": 78.0
+		"height": 56.0
 	},
 	"save_all_on_build": true,
 	"select_file":

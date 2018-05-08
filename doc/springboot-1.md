@@ -220,7 +220,7 @@ public @interface SpringBootApplication
 
 @**EnableAutoConfiguration**
 
-​	我们需要配置的东西，Spring Boot帮我们自动配置：@**EnableAutoConfiguration**告诉srpingboot开户自动配置功能；这样自动配置才能生效
+​	我们需要配置的东西，Spring Boot帮我们自动配置：@**EnableAutoConfiguration**告诉srpingboot开启自动配置功能；这样自动配置才能生效
 
 ```java
 @Target(value=TYPE)
@@ -593,28 +593,356 @@ Spring Boot里面没有Spring的配置文件，我们自己编写的配置文件
 
 Spring Boot推荐给容器中添加组件的方式：推荐使用全注解的方式
 
-1. 配置类=========Spring配置文件
+配置类=========Spring配置文件
 
-   
+ 
 
-2. 使用@Bean来给容器添加组件
+使用@Bean来给容器添加组件
 
-   ```
-   /**
-    * 指明当前类是一个配置类，用来替代之前的Spring配置文件
-    *  在配置文件中用<bean></bean>标签添加组件
-    * \
+```
+/**
+ * 指明当前类是一个配置类，用来替代之前的Spring配置文件
+ *  在配置文件中用<bean></bean>标签添加组件
+ */
+@Configuration
+public class MyAppConfig {
+
+    //将方法的返回值添加到容器中，容器中这个组件默认的id就是方法名
+    @Bean
+    public HelloService helloService() {
+        return new HelloService();
+    }
+}
+```
+
+
+
+## 4、配置文件点位符
+
+### 1、随机数
+
+```java
+${random.value}
+${random.int}
+${random.int(max)}
+${random.int(min,max)}
+${random.long}
+${random.long(max)}
+${random.long(min,max)}
+${random.uuid}
+```
+
+### 2、占位符获取之前配置的值，如果没有可以指定默认值
+
+```yaml
+        dog:
+            name: ${person.last-name:hello}_giggle
+            age: 2
+        last-name: zhangsan${random.uuid}
+```
+
+## 5、Profile
+
+### 1、多Profile文件
+
+在主配置文件编写的时候，文件名可以是application-{profile}.properties/yml，实现动态切换；默认使用application.properties/yml中的配置
+
+### 2、yml支持多文档块方式
+
+```yaml
+spring:
+  profiles:
+    active: dev
+
+---
+server:
+  port: 8081
+spring:
+  profiles: dev
+
+---
+server:
+  port: 8082
+spring:
+  profiles: prod
+```
+
+
+
+### 3、激活指定profile
+
+1. 在配置文件中指定spring.profiles.active=dev
+
+```yaml
+spring:
+  profiles:
+    active: dev
+```
+
+2. 命令行的方式激活
+
+```shell
+java -jar springboot.jar --spring.profile.active=dev
+```
+
+3. 虚拟机参数
+
+```shell
+VM options:
+	-Dspring.profiles.active=dev	
+```
+
+## 6、配置文件加载位置
+
+Spring Boot启动会扫描以下位置的application.properties或者application.yml文件作为Spring Boot的默认配置文件
+
+ - file:./config/
+- file:./
+- classpath:/config/
+- classpath:/
+- 以上是按照优先级从高到低的顺序，所有位置的文件都会被加载，高优先级配置会覆盖低优先级配置内容；Spring Boot会从这个个位置全部加载主配置文件，实现**互补配置**；
+- 可以通过spring.config.location来改变默认配置；
+
+其中，file是指当前项目根目录
+
+## 7、外部配置加载顺序
+
+```markdown
+1. Devtools global settings properties on your home directory (~/.spring-boot-devtools.properties when devtools is active).
+2. @TestPropertySource annotations on your tests.
+3. @SpringBootTest#properties annotation attribute on your tests.
+4. Command line arguments.
+5. Properties from SPRING_APPLICATION_JSON (inline JSON embedded in an environment variable or system property)
+6. ServletConfig init parameters.
+7. ServletContext init parameters.
+8. JNDI attributes from java:comp/env.
+9. Java System properties (System.getProperties()).
+10. OS environment variables.
+11. A RandomValuePropertySource that only has properties in random.
+
+由jar包外向jar包内进行寻找，优先加载带profile
+12. **Profile-specific application properties outside of your packaged jar (application-{profile}.properties and YAML variants)
+13. Profile-specific application properties packaged inside your jar (application-{profile}.properties and YAML variants)
+再加载不带profile
+14. Application properties outside of your packaged jar (application.properties and YAML variants).
+15. Application properties packaged inside your jar (application.properties and YAML variants).**
+16. @PropertySource annotations on your @Configuration classes.
+17. Default properties (specified using SpringApplication.setDefaultProperties).
+```
+
+## 8、 Spring Boot自动配置原理
+
+### 1、 精髓
+
+[配置文件能配置的属性参照](https://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/html/common-application-properties.html)
+
+**自动配置原理（非常重要）**：
+
+1）SpringBoot启动的时候加载主配置类，开启了自动配置功能
+
+2）@EnableAutoConfiguration作用：
+
+- 利用EnableAutoConfigurationImportSelector给容器中导入一些组件
+- List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
+
+		获取候选的配置
+
+```
+SpringFactoriesLoader.loadFactoryNames()
+扫描所有jar包类路径下的文件：META-INF/spring.factories
+将扫描到的文件内容，包装成Properties对象
+从Properties获取到EnableAutoConfiguration.class（类名）对应的值，然后将其添加在容器中
+```
+
+​	将类路径下 META-INF/spring.factories 里面配置的所有EnableAutoConfiguration的值加入到容器中。
+
+```properties
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\
+org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\
+org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\
+org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\
+org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\
+org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration,\
+org.springframework.boot.autoconfigure.cloud.CloudAutoConfiguration,\
+org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration,\
+org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration,\
+org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration,\
+org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.couchbase.CouchbaseDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.couchbase.CouchbaseRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.ldap.LdapDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.ldap.LdapRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.neo4j.Neo4jDataAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.neo4j.Neo4jRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.solr.SolrRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration,\
+org.springframework.boot.autoconfigure.elasticsearch.jest.JestAutoConfiguration,\
+org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration,\
+org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration,\
+org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration,\
+org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration,\
+org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration,\
+org.springframework.boot.autoconfigure.hazelcast.HazelcastJpaDependencyAutoConfiguration,\
+org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration,\
+org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration,\
+org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.JndiDataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.XADataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,\
+org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration,\
+org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration,\
+org.springframework.boot.autoconfigure.jms.JndiConnectionFactoryAutoConfiguration,\
+org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration,\
+org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfiguration,\
+org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration,\
+org.springframework.boot.autoconfigure.groovy.template.GroovyTemplateAutoConfiguration,\
+org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration,\
+org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration,\
+org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration,\
+org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapAutoConfiguration,\
+org.springframework.boot.autoconfigure.ldap.LdapAutoConfiguration,\
+org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration,\
+org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration,\
+org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration,\
+org.springframework.boot.autoconfigure.mobile.DeviceResolverAutoConfiguration,\
+org.springframework.boot.autoconfigure.mobile.DeviceDelegatingViewResolverAutoConfiguration,\
+org.springframework.boot.autoconfigure.mobile.SitePreferenceAutoConfiguration,\
+org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration,\
+org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration,\
+org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration,\
+org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,\
+org.springframework.boot.autoconfigure.reactor.ReactorAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.SecurityFilterAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.FallbackWebSecurityAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.oauth2.OAuth2AutoConfiguration,\
+org.springframework.boot.autoconfigure.sendgrid.SendGridAutoConfiguration,\
+org.springframework.boot.autoconfigure.session.SessionAutoConfiguration,\
+org.springframework.boot.autoconfigure.social.SocialWebAutoConfiguration,\
+org.springframework.boot.autoconfigure.social.FacebookAutoConfiguration,\
+org.springframework.boot.autoconfigure.social.LinkedInAutoConfiguration,\
+org.springframework.boot.autoconfigure.social.TwitterAutoConfiguration,\
+org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration,\
+org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration,\
+org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration,\
+org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration,\
+org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.HttpEncodingAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.ServerPropertiesAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.WebClientAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration,\
+org.springframework.boot.autoconfigure.websocket.WebSocketAutoConfiguration,\
+org.springframework.boot.autoconfigure.websocket.WebSocketMessagingAutoConfiguration,\
+org.springframework.boot.autoconfigure.webservices.WebServicesAutoConfiguration
+```
+
+
+
+3) 每一个自动配置类自动配置
+
+4) 以**HttpEncodingAutoConfiguration**为例解释自动配置原理：
+
+```java
+@Configuration //表示这是一个配置类，与以前编写的配置文件一样，可以给容器中添加组件
+@EnableConfigurationProperties({HttpEncodingProperties.class})//启动指定类的ConfigurationProperties功能，将配置文件中对应的值和HttpEncodingProperties绑定起来，并加入到IOC容器中
+@ConditionalOnWebApplication//Spring底层有@Conditional注解，根据不同的条件，如果满足指定的条件，整个配置类才会生效，当前注解判断是否为Web应用，如果是，当前配置类生效；
+@ConditionalOnClass({CharacterEncodingFilter.class})//判断当前项目是否存在CharacterEncodingFilter类，是SpringMVC中乱码解决的过滤器
+@ConditionalOnProperty(
+    prefix = "spring.http.encoding",
+    value = {"enabled"},
+    matchIfMissing = true
+) //判断配置文件中是否存在某个配置
+public class HttpEncodingAutoConfiguration {
+    
+    //已经跟Spring配置文件映射起来了
+    private final HttpEncodingProperties properties;
+
+    //只有一个有参构造器时，参数的值会从容器中拿
+    public HttpEncodingAutoConfiguration(HttpEncodingProperties properties) {
+        this.properties = properties;
+    }
+    /**
+    * 如果生效，则将下列组件添加到容器中
     */
-   @Configuration
-   public class MyAppConfig {
-   
-       //将方法的返回值添加到容器中，容器中这个组件默认的id就是方法名
-       @Bean
-       public HelloService helloService() {
-           return new HelloService();
-       }
-   }
-   ```
+    @Bean
+    @ConditionalOnMissingBean({CharacterEncodingFilter.class})
+    public CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter filter = new OrderedCharacterEncodingFilter();
+        filter.setEncoding(this.properties.getCharset().name());
+        filter.setForceRequestEncoding(this.properties.shouldForce(Type.REQUEST));
+        filter.setForceResponseEncoding(this.properties.shouldForce(Type.RESPONSE));
+        return filter;
+    }
+}
+```
 
-   
+根据当前不同的条件判断，决定这个配置类是否生效
+
+一旦这个配置类生效，这个配置类就是给容器中添加各种组件；这些组件的属性是从对应的Properties类中获取的，而这些类的中的每一个属性，又是与配置文件绑定的
+
+
+
+5) 所有在配置文件中能配置的属性都在xxxxProperties类中封闭着，配置文件能配置什么就可以参照HttpEncodingProperties类
+
+```java
+@ConfigurationProperties(
+    prefix = "spring.http.encoding"
+)
+public class HttpEncodingProperties
+```
+
+Spring Boot 精髓：
+
+​	1）SpringBoot启动会加载大量的自动配置类
+
+​	2） 需要的功能有没有SpringBoot默认写好的自动配置类
+
+​	3）再考察自动配置类中到底配置了哪些组件，如果已经有就不需要再配置了，如果没有需要自己编写配置类
+
+​	4）给容器中自动配置类添加组件的时候，会从Properties类中获取某些属性，此时可以在配置文件中指定这些属性的值
+
+
+
+xxxxAutoConfiguration：自动配置类，给容器添加组件
+
+xxxxProperties：封闭配置文件中的相关属性
+
+### 2、细节
+
+@Conditional 派生注解
+
+| @Conditional扩展注解                 | 作用（判断是否满足当前指定条件） |
+| ------------------------------- | ------------------------------------------------------- |
+| @ConditionalOnJava              | 系统的java版本是否符合要求                              |
+| @ConditionalOnBean              | 容器中存在指定Bean；                                    |
+| @ConditionalOnMissingBean       | 容器中不存在指定Bean；                                  |
+| @ConditionalOnExpression        | 满足SpEL表达式指定                                      |
+| @ConditionalOnClass             | 系统中有指定的类                                        |
+| @ConditionalOnMissingClass      | 系统中没有指定的类                                      |
+| @ConditionalOnSingleCandidate   | 容器中只有一个指定的Bean，或者这个Bean是首选Bean        |
+| @ConditionalOnProperty          | 系统中指定的属性是否有指定的值                          |
+| @ConditionalOnResource          | 类路径下是否存在指定资源文件                            |
+| @ConditionalOnWebApplication    | 当前是web环境                                           |
+| @ConditionalOnNotWebApplication | 当前不是web环境                                         |
+| @ConditionalOnJndi              | JNDI存在指定项                                          |
 
