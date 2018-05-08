@@ -1,0 +1,11 @@
+logging:
+  level:
+    com:
+      meituan: trace
+  #
+  path: F:\workspace\springboot\springboot-logging\log\
+  pattern:
+  ## 格式化输出日志
+    console:
+  # 没有配置path时，在当前项目目录下生成指定日志文件
+  #file: springboot.log

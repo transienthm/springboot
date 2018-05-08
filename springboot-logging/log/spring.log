@@ -1,0 +1,11 @@
+2018-05-08 16:36:58.793  INFO 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Starting SpringbootLoggingApplicationTests on DESKTOP-OATNVVG with PID 44272 (started by cab in F:\workspace\springboot\springboot-logging)
+2018-05-08 16:36:58.794 DEBUG 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2018-05-08 16:36:58.794  INFO 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : No active profile set, falling back to default profiles: default
+2018-05-08 16:36:58.830  INFO 44272 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@312ab28e: startup date [Tue May 08 16:36:58 CST 2018]; root of context hierarchy
+2018-05-08 16:36:59.575  INFO 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Started SpringbootLoggingApplicationTests in 1.554 seconds (JVM running for 2.61)
+2018-05-08 16:36:59.614 TRACE 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是trace日志
+2018-05-08 16:36:59.614 DEBUG 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是debug日志
+2018-05-08 16:36:59.614  INFO 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是info日志
+2018-05-08 16:36:59.614  WARN 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是warn日志
+2018-05-08 16:36:59.615 ERROR 44272 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是error日志
+2018-05-08 16:36:59.622  INFO 44272 --- [Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@312ab28e: startup date [Tue May 08 16:36:58 CST 2018]; root of context hierarchy

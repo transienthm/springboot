@@ -1,0 +1,44 @@
+2018-05-08 16:32:20.992  INFO 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Starting SpringbootLoggingApplicationTests on DESKTOP-OATNVVG with PID 49976 (started by cab in F:\workspace\springboot\springboot-logging)
+2018-05-08 16:32:20.993 DEBUG 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2018-05-08 16:32:20.993  INFO 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : No active profile set, falling back to default profiles: default
+2018-05-08 16:32:21.025  INFO 49976 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:32:21 CST 2018]; root of context hierarchy
+2018-05-08 16:32:21.850  INFO 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Started SpringbootLoggingApplicationTests in 1.62 seconds (JVM running for 2.731)
+2018-05-08 16:32:21.899 TRACE 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是trace日志
+2018-05-08 16:32:21.899 DEBUG 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是debug日志
+2018-05-08 16:32:21.900  INFO 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是info日志
+2018-05-08 16:32:21.900  WARN 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是warn日志
+2018-05-08 16:32:21.900 ERROR 49976 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是error日志
+2018-05-08 16:32:21.904  INFO 49976 --- [Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:32:21 CST 2018]; root of context hierarchy
+2018-05-08 16:33:18.848  INFO 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Starting SpringbootLoggingApplicationTests on DESKTOP-OATNVVG with PID 50164 (started by cab in F:\workspace\springboot\springboot-logging)
+2018-05-08 16:33:18.849 DEBUG 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2018-05-08 16:33:18.850  INFO 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : No active profile set, falling back to default profiles: default
+2018-05-08 16:33:18.885  INFO 50164 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:33:18 CST 2018]; root of context hierarchy
+2018-05-08 16:33:19.576  INFO 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Started SpringbootLoggingApplicationTests in 1.708 seconds (JVM running for 2.872)
+2018-05-08 16:33:19.617 TRACE 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是trace日志
+2018-05-08 16:33:19.617 DEBUG 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是debug日志
+2018-05-08 16:33:19.617  INFO 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是info日志
+2018-05-08 16:33:19.618  WARN 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是warn日志
+2018-05-08 16:33:19.618 ERROR 50164 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是error日志
+2018-05-08 16:33:19.621  INFO 50164 --- [Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:33:18 CST 2018]; root of context hierarchy
+2018-05-08 16:34:31.990  INFO 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Starting SpringbootLoggingApplicationTests on DESKTOP-OATNVVG with PID 49332 (started by cab in F:\workspace\springboot\springboot-logging)
+2018-05-08 16:34:32.054 DEBUG 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2018-05-08 16:34:32.055  INFO 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : No active profile set, falling back to default profiles: default
+2018-05-08 16:34:32.088  INFO 49332 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:34:32 CST 2018]; root of context hierarchy
+2018-05-08 16:34:32.845  INFO 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Started SpringbootLoggingApplicationTests in 1.632 seconds (JVM running for 2.793)
+2018-05-08 16:34:32.887 TRACE 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是trace日志
+2018-05-08 16:34:32.887 DEBUG 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是debug日志
+2018-05-08 16:34:32.887  INFO 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是info日志
+2018-05-08 16:34:32.888  WARN 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是warn日志
+2018-05-08 16:34:32.888 ERROR 49332 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是error日志
+2018-05-08 16:34:32.891  INFO 49332 --- [Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:34:32 CST 2018]; root of context hierarchy
+2018-05-08 16:35:10.895  INFO 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Starting SpringbootLoggingApplicationTests on DESKTOP-OATNVVG with PID 45824 (started by cab in F:\workspace\springboot\springboot-logging)
+2018-05-08 16:35:10.898 DEBUG 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2018-05-08 16:35:10.899  INFO 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : No active profile set, falling back to default profiles: default
+2018-05-08 16:35:10.950  INFO 45824 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:35:10 CST 2018]; root of context hierarchy
+2018-05-08 16:35:11.704  INFO 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : Started SpringbootLoggingApplicationTests in 1.571 seconds (JVM running for 2.733)
+2018-05-08 16:35:11.752 TRACE 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是trace日志
+2018-05-08 16:35:11.755 DEBUG 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是debug日志
+2018-05-08 16:35:11.755  INFO 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是info日志
+2018-05-08 16:35:11.756  WARN 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是warn日志
+2018-05-08 16:35:11.756 ERROR 45824 --- [main] c.m.s.SpringbootLoggingApplicationTests  : 这是error日志
+2018-05-08 16:35:11.760  INFO 45824 --- [Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@4351c8c3: startup date [Tue May 08 16:35:10 CST 2018]; root of context hierarchy
