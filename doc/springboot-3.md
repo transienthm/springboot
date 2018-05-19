@@ -133,3 +133,93 @@ public void addResourceHandlers(ResourceHandlerRegistry registry) {
 spring.resources.static-locations=classpath:/hello/,classpath:/meituan/
 ```
 
+## 3. 模块引擎
+
+JSP、Welocity、Freemarker、Thymeleaf
+
+![template engine](https://user-images.githubusercontent.com/16509581/40268706-d0d4ddd8-5ba4-11e8-8a24-1b834ebb2fd1.png)
+
+Spring Boot推荐使用的模块引擎Thymeleaf
+
+### 3.1 引入Thymeleaf
+
+```xml
+		<!-- 引入thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+```
+
+使用Thymeleaf3
+
+```xml
+<properties>
+    <thymeleaf.version>3.0.2.RELEASE</thymeleaf.version>
+    <thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
+</properties>
+```
+
+增加thymeleaf-layout支持
+
+```xml
+        <!--布局功能的支持程序 thymeleaf3主程序 layout2以上版本-->
+        <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
+```
+
+### 3.2 使用thymeleaf
+
+```java
+@ConfigurationProperties(prefix = "spring.thymeleaf")
+public class ThymeleafProperties {
+
+	private static final Charset DEFAULT_ENCODING = Charset.forName("UTF-8");
+
+	private static final MimeType DEFAULT_CONTENT_TYPE = MimeType.valueOf("text/html");
+
+//只要我们把HTML页面放在classpath:/templates/,thymeleaf就可以自动渲染了
+	public static final String DEFAULT_PREFIX = "classpath:/templates/";
+
+	public static final String DEFAULT_SUFFIX = ".html";
+	
+```
+
+只要我们把HTML页面放在classpath:/templates/,thymeleaf就可以自动渲染了
+
+1. 导入thymeleaf的名称空间
+
+```html
+<html xmlns:th="http://www.thymeleaf.org">
+```
+
+2. 使用thymeleaf语法
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>success</title>
+</head>
+<body>
+    <h1>成功！</h1>
+    <!--将div中的文本内容设置为文本内指定的值-->
+    <div th:text="${hello}">这是显示欢迎信息</div>
+</body>
+</html>
+```
+
+### 3.3 语法规则
+
+1. th:text：改变当前元素里面的文本内容
+
+   th: 做生意html属性，来替换原生属性的值
+
+| Order | Feature            | Attributes           |
+| ----- | ------------------ | -------------------- |
+| 1     | Fragment inclusion | th:insert th:replace |
+|       |                    |                      |
+|       |                    |                      |
+|       |                    |                      |
+|       |                    |                      |
+
