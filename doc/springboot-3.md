@@ -215,11 +215,57 @@ public class ThymeleafProperties {
 
    th: 做生意html属性，来替换原生属性的值
 
-| Order | Feature            | Attributes           |
-| ----- | ------------------ | -------------------- |
-| 1     | Fragment inclusion | th:insert th:replace |
-|       |                    |                      |
-|       |                    |                      |
-|       |                    |                      |
-|       |                    |                      |
+   ![thymeleaf](https://user-images.githubusercontent.com/16509581/40296156-78531628-5d0e-11e8-8b87-721e8fff14b3.png)
 
+2. 表达式语法
+
+   ```properties
+   Simple expressions:
+   	Variable Expressions: ${...}
+   		1. 获取对象的属性、调用方法
+   		2. 使用内置的基本对象
+   		3. 内置工具对象
+   	Selection Variable Expressions: *{...} 选择表达式
+   		补充：配合th:object使用
+   		<div th:object="${session.user}">
+               <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
+               <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
+               <p>Nationality: <span th:text="*{nationality}">Saturn</span>.</p>
+           </div>
+           
+   	Message Expressions: #{...} 获取国际化内容
+   	
+   	Link URL Expressions: @{...} 定义URL链接
+   	
+   	Fragment Expressions: ~{...}
+   	
+   Literals 字面量
+       Text literals: 'one text' , 'Another one!' ,…
+       Number literals: 0 , 34 , 3.0 , 12.3 ,…
+       Boolean literals: true , false
+       Null literal: null
+       Literal tokens: one , sometext , main ,…
+   Text operations: 文本操作
+       String concatenation: +
+       Literal substitutions: |The name is ${name}|
+   Arithmetic operations: 数学运算
+       Binary operators: + , - , * , / , %
+       Minus sign (unary operator): -
+   Boolean operations: 布尔运算
+       Binary operators: and , or
+       Boolean negation (unary operator): ! , not
+   Comparisons and equality: 比较运算
+       Comparators: > , < , >= , <= ( gt , lt , ge , le )
+       Equality operators: == , != ( eq , ne )
+   Conditional operators: 条件运算（三元运算）
+       If-then: (if) ? (then)
+       If-then-else: (if) ? (then) : (else)
+       Default: (value) ?: (defaultvalue)
+   Special tokens:
+       Page 17 of 104
+       No-Operation: _
+   ```
+
+   ## 4. SpringBoot对SpringMVC的自动配置
+
+   
