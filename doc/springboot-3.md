@@ -266,6 +266,42 @@ public class ThymeleafProperties {
        No-Operation: _
    ```
 
-   ## 4. SpringBoot对SpringMVC的自动配置
-
    
+
+## 4. SpringBoot对SpringMVC的自动配置
+
+> Spring Boot provides auto-configuration for Spring MVC that works well with most applications.
+>
+> The auto-configuration adds the following features on top of Spring’s defaults:
+>
+> - Inclusion of `ContentNegotiatingViewResolver` and `BeanNameViewResolver` beans.
+>   - 自动配置了ViewResolver(视图解析器：根据方法的返回值得到视图对象View，视图对象决定如何渲染，转发或重定向)
+>   - `ContentNegotiatingViewResolver`组合所有的视图解析器
+>   - 如何定制：可以自己给容器中添加一个视图解析器，`ContentNegotiatingViewResolver`会自动将其组合起来
+> - Support for serving static resources, including support for WebJars (see below).静态资源文件夹路径
+> - Automatic registration of `Converter`, `GenericConverter`, `Formatter` beans.
+>   - Converter 转换器 页面接收的数据类型转换使用Converter
+>   - Formatter 格式化器，例如2018.5.22=》Date
+>   - 自己添加的Convertor、Formattor只需放在容器中即可
+> - Support for `HttpMessageConverters` (see below).
+>   - `HttpMessageConverter`SpringMVC用来转换Http的请求和响应：User《=》json
+>   - `HttpMessageConverters`从容器中确定；获取所有的HttpmessageConverter
+>   - 自己给容器中添加HttpMessageConverter，只需将自己的组件注册到容器中(@Bean @Component)
+> - Automatic registration of `MessageCodesResolver` (see below).定义错误代码生成规则
+> - Static `index.html` support.静态首页访问
+> - Custom `Favicon` support (see below).
+> - Automatic use of a `ConfigurableWebBindingInitializer` bean (see below).
+>   - 可以配置一个`ConfigurableWebBindingInitializer`来替换默认的(添加的容器中)
+>   - `ConfigurableWebBindingInitializer`的作用是初始化WebDataBinder
+>
+> **org.springframework.boot.autoconfigure.web : web的所有自动配置场景**
+>
+> If you want to keep Spring Boot MVC features, and you just want to add additional [MVC configuration](https://docs.spring.io/spring/docs/4.3.13.RELEASE/spring-framework-reference/htmlsingle#mvc) (interceptors, formatters, view controllers etc.) you can add your own `@Configuration` class of type `WebMvcConfigurerAdapter`, but **without** `@EnableWebMvc`. If you wish to provide custom instances of `RequestMappingHandlerMapping`, `RequestMappingHandlerAdapter` or `ExceptionHandlerExceptionResolver` you can declare a `WebMvcRegistrationsAdapter` instance providing such components.
+>
+> If you want to take complete control of Spring MVC, you can add your own `@Configuration` annotated with `@EnableWebMvc`.
+
+## 5. 如何修改Spring Boot的默认配置
+
+模式：
+
+1. SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置的
