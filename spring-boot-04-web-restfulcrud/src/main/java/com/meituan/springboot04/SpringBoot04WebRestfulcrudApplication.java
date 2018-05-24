@@ -15,7 +15,7 @@ public class SpringBoot04WebRestfulcrudApplication {
 		SpringApplication.run(SpringBoot04WebRestfulcrudApplication.class, args);
 	}
 
-	@Bean
+/*	@Bean
 	public ViewResolver myViewResolver() {
 		return new MyViewResolver();
 	}
@@ -26,6 +26,6 @@ public class SpringBoot04WebRestfulcrudApplication {
 		public View resolveViewName(String s, Locale locale) throws Exception {
 			return null;
 		}
-	}
+	}*/
 
 }

@@ -416,3 +416,100 @@ public class WebMvcAutoConfiguration
 
 ## 6. RestfulCRUD
 
+### 6.1 引入资源
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Signin Template for Bootstrap</title>
+		<!-- Bootstrap core CSS -->
+		<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet" />
+		<!-- Custom styles for this template -->
+		<link href="asserts/css/signin.css" th:href="@{/asserts/css/signin.css}" rel="stylesheet" />
+	</head>
+
+	<body class="text-center">
+		<form class="form-signin" action="dashboard.html">
+			<img class="mb-4" th:src="@{asserts/img/bootstrap-solid.svg}" src="asserts/img/bootstrap-solid.svg" alt="" width="72" height="72">
+			<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+			<label class="sr-only">Username</label>
+			<input type="text" class="form-control" placeholder="Username" required="" autofocus="">
+			<label class="sr-only">Password</label>
+			<input type="password" class="form-control" placeholder="Password" required="">
+			<div class="checkbox mb-3">
+				<label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+			<p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+			<a class="btn btn-sm">中文</a>
+			<a class="btn btn-sm">English</a>
+		</form>
+
+	</body>
+
+</html>
+```
+
+采用thymeleaf的写法，如`<link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet" />`好处是更改项目目录后不需要再修改代码
+
+### 6.2 国际化
+
+在SpringMVC中需要以下几个步骤
+
+1. 编写国际化配置文件
+2. 使用ResourceBundleMessageSour管理国际化资源文件
+3. 在页面使用fmt:message取出国际化内容
+
+SpringBoot中的步骤为：
+
+1. 编写国际化配置文件，抽取页面需要显示的国际化消息
+
+   ![20180211130721](https://user-images.githubusercontent.com/16509581/40460488-7e43cadc-5f39-11e8-9b45-eee020874a2c.png)
+
+2. SpringBoot自动配置好了管理国际化资源文件的组件
+
+```java
+@ConfigurationProperties(prefix = "spring.messages")
+public class MessageSourceAutoConfiguration {
+
+	private static final Resource[] NO_RESOURCES = {};
+
+	/**
+	 * Comma-separated list of basenames (essentially a fully-qualified classpath
+	 * location), each following the ResourceBundle convention with relaxed support for
+	 * slash based locations. If it doesn't contain a package qualifier (such as
+	 * "org.mypackage"), it will be resolved from the classpath root.
+	 */
+	private String basename = "messages";//我们的配置文件可以直接放在类路径下，叫messages.properties，此时不需要做任何配置即可生效；如自定义，可以在application.properties中添加配置spring.messages.basename=i18n.login
+    
+    @Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		if (StringUtils.hasText(this.basename)) {
+			
+ //设置国际化资源文件的基础名(去掉语言国家代码的)
+            messageSource.setBasenames(StringUtils.commaDelimitedListToStringArray(
+					StringUtils.trimAllWhitespace(this.basename)));
+		}
+		if (this.encoding != null) {
+			messageSource.setDefaultEncoding(this.encoding.name());
+		}
+		messageSource.setFallbackToSystemLocale(this.fallbackToSystemLocale);
+		messageSource.setCacheSeconds(this.cacheSeconds);
+		messageSource.setAlwaysUseMessageFormat(this.alwaysUseMessageFormat);
+		return messageSource;
+	}
+    
+```
+
+
+
+
+
