@@ -667,7 +667,160 @@ public class MylocaleResolver implements LocaleResolver {
             map.put("msg", "用户名密码错误");
             return "login";
         }
+    }    
+```
+
+### 6.4 拦截器进行登陆检查
+
+自定义拦截器
+
+```java
+/**
+ * 进行登陆检查
+ */
+public class LoginHandlerInterceptor implements HandlerInterceptor {
+    //目标方法执行之前
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        Object user = request.getSession().getAttribute("loginUser");
+        if (user == null) {
+            //未登陆，返回登陆页面
+            //获取转发器，进行转发操作
+            request.setAttribute("msg", "没有权限，请先登陆");
+            request.getRequestDispatcher("/index.html").forward(request, response);
+            return false;
+        } else {
+            //已登陆
+            return true;
+        }
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
+    }
+}
+```
+
+拦截器的注册
+
+```java
+//所有的WebMvcConfigurerAdapter组件都会共同起作用
+    @Bean//将组件注册在容器中
+    public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
+        WebMvcConfigurerAdapter adapter = new WebMvcConfigurerAdapter() {
+            @Override
+            public void addViewControllers(ViewControllerRegistry registry) {
+                registry.addViewController("/").setViewName("login");
+                registry.addViewController("/index.html").setViewName("login");
+                registry.addViewController("/main.html").setViewName("dashboard");
+            }
+
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                //静态资源："*.css" "*.js"
+                //SpringBoot已经做好了静态资源映射，不需要排除
+                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+                        .excludePathPatterns("/index.html", "/user/login", "/");
+            }
+        };
+
+        return adapter;
     }
 ```
 
-3. 拦截器进行登陆
+### 6.5 CRUD-员工列表
+
+实验要求
+
+1. RestfulCRUD：CRUD满足Rest风格
+
+   URI：/资源名称/资源标识  HTTp请求方式区分对资源CRUD操作
+
+   |      | 普通CRUD（uri来区分操作） | RestfulCRUD       |
+   | ---- | ------------------------- | ----------------- |
+   | 查询 | getEMP                    | emp---GET         |
+   | 添加 | addEMP?xxx                | emp---POST        |
+   | 修改 | updateEmp?id=xxx&xxx=xx   | emp/{id}---PUT    |
+   | 删除 | deleteEmp?id=1            | emp/{id}---DELETE |
+
+2. 实验的请求架构设计
+
+   |                                      | 请求URI                | 请求方式 |
+   | ------------------------------------ | ---------------------- | -------- |
+   | 查询所有员工                         | emps                   | GET      |
+   | 查询某个员工（来到修改页面）         | emp/{id}      路径变量 | GET      |
+   | 来到添加页面                         | emp                    | GET      |
+   | 添加员工                             | emp                    | POST     |
+   | 来到修改页面（查出员工进行信息回显） | emp/{id}               | GET      |
+   | 修改员工                             | emp                    | PUT      |
+   | 删除员工                             | emp/{id}               | DELETE   |
+
+   
+
+3. 员工列表
+
+   thymeleaf公共页面元素抽取
+
+   ```html
+   1. 抽取公共片段
+   <div th:fragment="copy">
+   	&copy; 2011 The Good Thymes Virtual Grocery
+   </div>
+   
+   2. 引入公共片段
+   <div th:insert="~{footer :: copy}"></div>
+   <!--或者-->
+   <div th:insert="footer :: copy"></div>
+   
+   ~{templatename::selector} 模板名::选择器
+   ~{templatename::fragmentname} 模板名::片段名
+   
+   3. 默认效果
+   insert的功能片段在div的标签中
+   ```
+
+   三种引入功能片段的th属性：
+
+   1. th:insert 将公共片段整个插入到声明引入的元素中
+   2.  th:replace 将声明引入的片段替换为公共片段
+   3.  th:include 将被引入的片段的内容包含进标签中 
+
+   区别：
+
+   ```html
+   <footer th:fragment="copy">
+   	&copy; 2011 The Good Thymes Virtual Grocery
+   </footer>
+   
+   引入方式
+   <body>
+       ...
+       <div th:insert="footer :: copy"></div>
+       <div th:replace="footer :: copy"></div>
+       <div th:include="footer :: copy"></div>
+   </body>
+   
+   效果
+   <body>
+       ...
+       <div>
+           <footer>
+               &copy; 2011 The Good Thymes Virtual Grocery
+           </footer>
+       </div>
+       <footer>
+       	&copy; 2011 The Good Thymes Virtual Grocery
+       </footer>
+       <div>
+       	&copy; 2011 The Good Thymes Virtual Grocery
+       </div>
+   </body>
+   ```
+
+   
