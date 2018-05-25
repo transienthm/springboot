@@ -21,13 +21,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/meituan").setViewName("success");
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        //静态资源："*.css" "*.js"
-        //SpringBoot已经做好了静态资源映射，不需要排除
-        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/index.html", "/user/login", "/");
-    }
+
 
     //所有的WebMvcConfigurerAdapter组件都会共同起作用
     @Bean//将组件注册在容器中
@@ -38,6 +32,14 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
                 registry.addViewController("/").setViewName("login");
                 registry.addViewController("/index.html").setViewName("login");
                 registry.addViewController("/main.html").setViewName("dashboard");
+            }
+
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                //静态资源："*.css" "*.js"
+                //SpringBoot已经做好了静态资源映射，不需要排除
+                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+                        .excludePathPatterns("/index.html", "/user/login", "/");
             }
         };
 
