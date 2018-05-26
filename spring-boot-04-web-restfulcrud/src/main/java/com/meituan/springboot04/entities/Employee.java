@@ -78,6 +78,9 @@ public class Employee {
         this.birth = new Date();
     }
 
+    public Employee() {
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
