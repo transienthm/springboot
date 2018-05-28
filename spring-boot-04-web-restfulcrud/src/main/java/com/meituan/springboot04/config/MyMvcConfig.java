@@ -2,6 +2,8 @@ package com.meituan.springboot04.config;
 
 import com.meituan.springboot04.component.LoginHandlerInterceptor;
 import com.meituan.springboot04.component.MylocaleResolver;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class MyMvcConfig extends WebMvcConfigurerAdapter {
 
+    
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //浏览器发送/meituan 请求来到 success
