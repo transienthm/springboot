@@ -244,6 +244,52 @@ schema-*.sql、data-*.sql
 
 ## 2、整合Druid数据源
 
+maven导入数据源
+
+```xml
+		<!--引入druid数据源-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.8</version>
+		</dependency>
+```
+
+
+
+数据源yml配置文件
+
+```yaml
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://39.104.114.86:3306/springboot?characterEncoding=utf8&autoReconnect=true&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+#   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    #schema: 
+    #- classpath:department.sql
+```
+
+
+
 ```java
 导入druid数据源
 @Configuration
